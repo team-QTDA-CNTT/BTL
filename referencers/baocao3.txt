@@ -1,264 +1,306 @@
-BÁO CÁO PROJECT II
-Ð? tài: Tìm hi?u v? công ngh? Blockchain
+package info.devexchanges.bluetoothchatapp;
 
-L?ch s? c?a Blockchain
-Blockchain dã du?c gi?i thi?u v?i phát minh bitcoin trong nam 2008 và sau dó là du?c phát tri?n thành phiên b?n th?c t? vào nam 2009. Ð?i v?i chuong trình này, nó dã gi?i thi?u ng?n g?n nhu m?t chuong trình d?y d? v? bitcoin sau này, nhung nó cung r?t c?n thi?t d? tham kh?o bitcoin vì không có nó, l?ch s? c?a blockchain chua hoàn thành. Khái ni?m ti?n di?n t? không ph?i là m?i, t? nh?ng nam 1980, các giao th?c ti?n di?n t? dã t?n t?i d?a trên mô hình du?c d? xu?t b?i David Chaum.
+import android.app.Activity;
+import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-Chuong 1. Gi?i thi?u các khái ni?m co b?n v? tính toán phân tán d?a trên công ngh? blockchain nào. Nó cung bao g?m l?ch s?, d?nh nghia, tính nang, lo?i và l?i ích c?a blockchains cùng v?i các co ch? d?ng thu?n là c?t lõi c?a công ngh? blockchain.
+import java.util.ArrayList;
+import java.util.Set;
 
-Gi?i thi?u v? Blockchain
-Có nhi?u d?nh nghia khác nhau v? blockchain; Nó ph? thu?c vào cách b?n nhìn vào nó. N?u b?n nhìn nó t? góc d? kinh doanh, nó có th? du?c d?nh nghia trong ng? c?nh dó, n?u b?n nhìn vào nó t? góc d? ki thu?t, ngu?i ta có th? d?nh nghia nó theo quan di?m dó.
-Blockchain t?i lõi c?a nó là s? k? toán phân ph?i ngang hàng, an toàn v? m?t mã hóa, ch?p vá, không thay d?i (c?c k? khó thay d?i), và có th? c?p nh?t thông qua s? d?ng thu?n ho?c th?a thu?n gi?a các d?ng nghi?p.
-Blockchain có th? du?c coi là m?t l?p c?a m?t m?ng ngang hàng du?c phân ph?i ch?y trên d?u trang c?a Internet, nhu có th? th?y bên du?i trong bi?u d?. Nó tuong t? nhu SMTP, HTTP, ho?c FTP ch?y trên d?u trang c?a TCP / IP. Ði?u này du?c th? hi?n trong so d? sau:
- 
-Ch? d? xem m?ng c?a m?t blockchain
-T? quan di?m kinh doanh, m?t blockchain có th? du?c d?nh nghia là m?t n?n t?ng trong dó các d?ng nghi?p có th? trao d?i các giá tr? b?ng cách s? d?ng các giao d?ch mà không c?n m?t tr?ng tài trung tâm tin c?y. Ðây là m?t khái ni?m m?nh m? và m?t khi d?c gi? hi?u nó, h? s? nh?n ra ti?m nang sóng th?n c?a công ngh? blockchain. Ði?u này cho phép blockchain là m?t co ch? d?ng thu?n phi t?p trung mà không có co quan duy nh?t nào ch?u trách nhi?m c?a co s? d? li?u.
-M?t kh?i don gi?n là m?t t?p h?p các giao d?ch du?c nhóm l?i v?i nhau d? s?p x?p chúng m?t cách h?p lý. Nó du?c t?o thành t? các giao d?ch và kích thu?c c?a nó là bi?n tùy thu?c vào lo?i và thi?t k? c?a blockchain du?c s? d?ng. M?t tham chi?u d?n m?t kh?i tru?c dó cung du?c bao g?m trong kh?i tr? khi nó là m?t kh?i genesis. M?t kh?i genesis là kh?i d?u tiên trong blockchain du?c mã hóa c?ng t?i th?i di?m blockchain du?c b?t d?u. C?u trúc c?a m?t kh?i cung ph? thu?c vào lo?i và thi?t k? c?a m?t blockchain, nhung nói chung có m?t vài thu?c tính c?n thi?t cho ch?c nang c?a m?t kh?i, ch?ng h?n nhu tiêu d? kh?i, con tr? t?i các kh?i tru?c dó, d?u th?i gian, nonce, b? d?m giao d?ch, giao d?ch và các thu?c tính khác.
-Ði?u này du?c th? hi?n trong m?t so d? kh?i don gi?n nhu sau. Ðây là m?t mô t? chung c?a m?t kh?i; các c?u trúc kh?i c? th? liên quan d?n công ngh? blockchain c?a chúng s? du?c th?o lu?n sau trong cu?n sách v?i các chi ti?t k? thu?t chuyên sâu hon:
+public class MainActivity extends AppCompatActivity {
 
- 
-C?u trúc c?a m?t kh?i
-Các d?nh nghia k? thu?t khác nhau c?a blockchains
-Blockchain là m?t co ch? d?ng thu?n phi t?p trung. Trong m?t blockchain, t?t c? các d?ng nghi?p cu?i cùng di d?n m?t th?a thu?n liên quan d?n tr?ng thái c?a m?t giao d?ch.
-Blockchain là m?t s? k? toán du?c chia s? du?c phân ph?i. Blockchain có th? du?c coi là s? k? toán du?c chia s? c?a các giao d?ch. Giao d?ch du?c s?p x?p và du?c nhóm thành các kh?i. Hi?n t?i, mô hình th? gi?i th?c d?a trên co s? d? li?u riêng mà m?i t? ch?c duy trì trong khi s? k? toán phân ph?i có th? ph?c v? nhu m?t ngu?n chân lý duy nh?t cho t?t c? các t? ch?c thành viên dang s? d?ng blockchain.
-Blockchain là m?t c?u trúc d? li?u; nó v? co b?n là m?t danh sách liên k?t s? d?ng con tr? bam thay vì con tr? bình thu?ng. Hash con tr? du?c s? d?ng d? tr? d?n kh?i tru?c dó.
-C?u trúc c?a m?t blockchain chung có th? du?c hình dung v?i s? tr? giúp c?a so d? sau:
- 
+    private TextView status;
+    private Button btnConnect;
+    private ListView listView;
+    private Dialog dialog;
+    private TextInputLayout inputLayout;
+    private ArrayAdapter<String> chatAdapter;
+    private ArrayList<String> chatMessages;
+    private BluetoothAdapter bluetoothAdapter;
 
-Các y?u t? chung c?a m?t blockchain
-Ð?a ch?
-Ð?a ch? là s? nh?n d?ng duy nh?t du?c s? d?ng trong giao d?ch trên blockchain d? bi?u th? ngu?i g?i và ngu?i nh?n. Ð?a ch? thu?ng là khóa công khai ho?c du?c l?y t? khóa công khai. M?c dù các d?a ch? có th? du?c tái s? d?ng b?i cùng m?t ngu?i dùng nhung chính d?a ch? là duy nh?t. Tuy nhiên, trong th?c t?, m?t ngu?i dùng không th? s? d?ng l?i cùng m?t d?a ch? và t?o m?t d?a ch? m?i cho m?i giao d?ch. Ð?a ch? m?i du?c t?o này s? là duy nh?t. Bitcoin th?c ch?t là m?t h? th?ng bút danh. Ngu?i dùng cu?i thu?ng không th? nh?n d?ng tr?c ti?p nhung m?t s? nghiên c?u trong vi?c ?n danh ngu?i dùng bitcoin dã cho th?y r?ng ngu?i dùng có th? du?c xác d?nh thành công. Nhu m?t th?c hành t?t, ngu?i dùng g?i ý r?ng ngu?i dùng t?o d?a ch? m?i cho m?i giao d?ch d? tránh liên k?t giao d?ch v?i ch? s? h?u chung, do dó tránh nh?n d?ng.
-Giao d?ch
-M?t giao d?ch là don v? co b?n c?a m?t blockchain. Giao d?ch d?i di?n cho vi?c chuy?n giá tr? t? d?a ch? này sang d?a ch? khác.
-Kh?i
-M?t kh?i bao g?m nhi?u giao d?ch và m?t s? thành ph?n khác nhu kh?i tru?c bam (con tr? bam), d?u th?i gian và nonce.
-M?ng ngang hàng
-Nhu tên c?a nó, dây là m?t c?u trúc liên k?t m?ng theo dó t?t c? các d?ng nghi?p có th? giao ti?p v?i nhau và g?i và nh?n tin nh?n.
-Ngôn ng? l?p trình ho?c vi?t mã
-Ph?n t? này th?c hi?n các ho?t d?ng khác nhau trên m?t giao d?ch. Các t?p l?nh giao d?ch là các t?p l?nh du?c xác d?nh tru?c cho các nút chuy?n mã thông báo t? d?a ch? này sang d?a ch? khác và th?c hi?n các ch?c nang khác. Turing ngôn ng? l?p trình hoàn ch?nh là m?t tính nang mong mu?n c?a blockchains; tuy nhiên, s? an toàn c?a các ngôn ng? dó là m?t câu h?i quan tr?ng và m?t linh v?c nghiên c?u quan tr?ng và liên t?c.
-Máy ?o
-Ðây là ph?n m? r?ng c?a t?p l?nh giao d?ch. M?t máy ?o cho phép Turing mã hoàn ch?nh du?c ch?y trên m?t blockchain (nhu các h?p d?ng thông minh) trong khi m?t k?ch b?n giao d?ch có th? b? h?n ch? trong ho?t d?ng c?a nó. Các máy ?o không có s?n trên t?t c? các blockchains; tuy nhiên, các blockchains khác nhau s? d?ng các máy ?o d? ch?y các chuong trình, ví d? Ethereum Virtual Machine (EVM) và Chain Virtual Machine (CVM).
-Máy tr?ng thái
-M?t blockchain có th? du?c xem nhu là m?t co ch? chuy?n d?i tr?ng thái, theo dó m?t tr?ng thái du?c s?a d?i t? d?ng ban d?u sang d?ng ti?p theo và cu?i cùng thành d?ng cu?i cùng do k?t qu? c?a quá trình th?c hi?n giao d?ch và xác nh?n b?i các nút.
-Nút
-M?t nút trong m?t m?ng blockchain th?c hi?n các ch?c nang khác nhau tùy thu?c vào vai trò c?a nó. M?t nút có th? d? xu?t và xác th?c giao d?ch và th?c hi?n khai thác d? t?o thu?n l?i cho s? d?ng thu?n và b?o m?t blockchain. Ði?u này du?c th?c hi?n b?ng cách làm theo m?t giao th?c d?ng thu?n. Các nút cung có th? th?c hi?n các ch?c nang khác nhu xác minh thanh toán don gi?n (các nút nh?), trình duy?t tính h?p l? và nhi?u ch?c nang khác tùy thu?c vào lo?i blockchain du?c s? d?ng và vai trò du?c gán cho nút.
-H?p d?ng thông minh
-Các chuong trình này ch?y trên d?u trang c?a blockchain và dóng gói logic nghi?p v? du?c th?c hi?n khi các di?u ki?n nh?t d?nh du?c dáp ?ng. Tính nang h?p d?ng thông minh không có s?n trong t?t c? các blockchains nhung bây gi? tr? thành m?t tính nang r?t mong mu?n do s? linh ho?t và s?c m?nh nó cung c?p cho các ?ng d?ng blockchain.
-Ð?c di?m c?a blockchain
-M?t blockchain th?c hi?n các ch?c nang khác nhau. Chúng du?c mô t? chi ti?t du?i dây.
-S? d?ng thu?n phân tán
-S? d?ng thu?n phân tán là n?n t?ng chính c?a m?t blockchain. Ði?u này cho phép m?t blockchain d? trình bày m?t phiên b?n duy nh?t c?a s? th?t du?c th?a thu?n b?i t?t c? các bên mà không có yêu c?u c?a m?t co quan trung uong.
-Xác minh giao d?ch
-B?t k? giao d?ch nào du?c dang t? các nút trên blockchain d?u du?c xác minh d?a trên m?t b? quy t?c xác d?nh tru?c và ch? các giao d?ch h?p l? du?c ch?n d? dua vào m?t kh?i.
-N?n t?ng cho h?p d?ng thông minh
-Blockchain là m?t n?n t?ng noi các chuong trình có th? ch?y th?c thi logic nghi?p v? thay m?t cho ngu?i dùng. Nhu dã gi?i thích tru?c dó, không ph?i t?t c? các blockchains d?u có co ch? th?c thi các h?p d?ng thông minh; tuy nhiên, dây là m?t tính nang r?t h?p d?n.
-Chuy?n giá tr? gi?a các d?ng nghi?p
-Blockchain cho phép chuy?n giá tr? gi?a ngu?i dùng thông qua mã thông báo. Tokens có th? du?c coi là m?t tàu sân bay có giá tr?.
-T?o ti?n di?n t?
-Ðây là m?t tính nang tùy ch?n tùy thu?c vào lo?i blockchain du?c s? d?ng. M?t blockchain có th? t?o ra ti?n di?n t? nhu m?t s? khích l? cho các th? m? c?a nó, nh?ng ngu?i xác th?c các giao d?ch và s? d?ng các ngu?n l?c d? b?o d?m blockchain.
-Tài s?n thông minh
-L?n d?u tiên có th? liên k?t m?t tài s?n k? thu?t s? ho?c v?t lý v?i blockchain theo cách không h?y ngang, sao cho nó không th? du?c b?t k? ai khác yêu c?u; b?n có toàn quy?n ki?m soát tài s?n c?a mình và không th? chi tr? g?p dôi ho?c s? h?u g?p dôi. So sánh nó v?i m?t t?p tin âm nh?c k? thu?t s?, ví d?, mà có th? du?c sao chép nhi?u l?n mà không c?n b?t k? ki?m soát; trên m?t blockchain, tuy nhiên, n?u b?n s? h?u nó không ai khác có th? yêu c?u nó tr? khi b?n quy?t d?nh chuy?n nó cho ai dó. Tính nang này có ý nghia sâu r?ng nh?t là trong Qu?n lý quy?n k? thu?t s? (DRM) và h? th?ng ti?n di?n t?, trong dó phát hi?n chi tiêu kép là yêu c?u quan tr?ng. V?n d? chi tiêu g?p dôi l?n d?u tiên du?c gi?i quy?t b?ng bitcoin.
-Nhà cung c?p b?o m?t
-Blockchain d?a trên công ngh? mã hóa dã du?c ch?ng minh, d?m b?o tính toàn v?n và tính s?n có c?a d? li?u. Nói chung, tính b?o m?t không du?c cung c?p do các yêu c?u v? tính minh b?ch. Ði?u này dã tr? thành rào c?n chính cho kh? nang thích ?ng c?a nó b?i các t? ch?c tài chính và các ngành khác c?n s? riêng tu và b?o m?t c?a các giao d?ch. Nhu v?y nó dang du?c nghiên c?u r?t tích c?c và dã có m?t s? ti?n b? t?t du?c th?c hi?n. Có th? l?p lu?n r?ng trong nhi?u tình hu?ng b?o m?t thì không th?c s? c?n thi?t và minh b?ch du?c ua thích d? thay th?. Ví d?, trong b?o m?t bitcoin là không th?c s? c?n thi?t; Tuy nhiên, nó là mong mu?n trong m?t s? k?ch b?n. Nghiên c?u trong linh v?c này là r?t chín và dã có nh?ng ti?n b? l?n dã du?c th?c hi?n theo hu?ng cung c?p b?o m?t và riêng tu trên blockchain. M?t ví d? g?n dây hon là Zcash, s? du?c th?o lu?n chi ti?t hon trong các chuong sau. Các d?ch v? b?o m?t khác nhu nonrepudiation và authentication cung du?c cung c?p b?i blockchain vì t?t c? các hành d?ng du?c b?o m?t b?ng cách s? d?ng khóa riêng và ch? ký s?.
-Tính không thay d?i
-Ðây là m?t tính nang quan tr?ng khác c?a blockchain: các b?n ghi dã du?c thêm vào blockchain là không thay d?i. Có kh? nang quay tr? l?i nh?ng thay d?i nhung di?u này du?c coi là g?n nhu không th? làm vì nó s? dòi h?i m?t s? tài nguyên máy tính không th? ki?m du?c. Ví d?, trong tru?ng h?p mong mu?n nhi?u bitcoin n?u m?t ngu?i dùng d?c h?i mu?n thay d?i các kh?i tru?c dó thì nó s? yêu c?u tính toán PoW m?t l?n n?a cho t?t c? các kh?i dã du?c thêm vào blockchain. Khó khan này làm cho các h? so trên m?t blockchain th?c t? b?t bi?n.
-Tính d?c dáo
-Tính nang này c?a blockchain d?m b?o r?ng m?i giao d?ch là duy nh?t và chua du?c chi tiêu. Ði?u này d?c bi?t có liên quan trong ti?n di?n t?, noi phát hi?n nhi?u và mong mu?n chi tiêu g?p dôi là m?t yêu c?u quan tr?ng.
-H?p d?ng thông minh
-Blockchain cung c?p m?t n?n t?ng d? ch?y các h?p d?ng thông minh. Ðây là nh?ng chuong trình t? d?ng t? d?ng n?m trên blockchain và dóng gói logic nghi?p v? và mã d? th?c hi?n m?t ch?c nang du?c yêu c?u khi các di?u ki?n nh?t d?nh du?c dáp ?ng. Ðây th?c s? là m?t tính nang mang tính cách m?ng c?a blockchain vì nó cho phép tính linh ho?t, kh? nang l?p trình và ki?m soát nhi?u hành d?ng mong mu?n mà ngu?i dùng blockchain c?n th?c hi?n theo yêu c?u kinh doanh c? th? c?a h?.
-?ng d?ng công ngh? blockchain
-Công ngh? Blockchain có vô s? các ?ng d?ng trong các linh v?c khác nhau bao g?m nhung không gi?i h?n v? tài chính, chính ph?, truy?n thông, lu?t và ngh? thu?t. Noi các tru?ng h?p s? d?ng th?c t? s? du?c th?o lu?n chi ti?t cho các ngành công nghi?p khác nhau. Nó là d? d? nói cho bây gi? mà h?u nhu t?t c? các ngành công nghi?p dã nh?n ra ti?m nang và l?i h?a c?a blockchain và dã b?t tay, ho?c s?m s? b?t tay, trên hành trình d? du?c hu?ng l?i t? công ngh? blockchain.
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_WRITE = 3;
+    public static final int MESSAGE_DEVICE_OBJECT = 4;
+    public static final int MESSAGE_TOAST = 5;
+    public static final String DEVICE_OBJECT = "device_name";
 
-Các lo?i blockchain
-D?a trên cách blockchain dã phát tri?n trong vài nam qua, nó có th? du?c chia thành nhi?u lo?i v?i các thu?c tính khác bi?t nhung dôi khi ch?ng chéo m?t ph?n.
-Blockchains công c?ng
-Các blockchains này du?c m? cho công chúng và b?t c? ai cung có th? tham gia nhu m?t nút trong quá trình ra quy?t d?nh. Ngu?i dùng có th? ho?c không du?c khen thu?ng vì s? tham gia c?a h?. Các s? cái này không thu?c s? h?u c?a b?t k? ai và du?c m? công khai cho b?t k? ai tham gia. T?t c? ngu?i dùng c?a s? k? toán không cho phép duy trì b?n sao s? k? toán trên các nút c?c b? c?a h? và s? d?ng co ch? d?ng thu?n phân tán d? d?t du?c quy?t d?nh v? cu?i cùng tr?ng thái s? cái. Nh?ng blockchains này còn du?c g?i là led-less ledgers.
-Blockchains riêng tu
-Blockchains riêng tu nhu tên ng? ý là tu nhân và ch? m? c?a cho m?t t?p doàn ho?c nhóm cá nhân ho?c t? ch?c dã quy?t d?nh chia s? s? cái trong s? h?.
-Blockchains bán riêng tu
-? dây m?t ph?n c?a blockchain là riêng tu và m?t ph?n c?a nó là công khai. Ph?n tu nhân du?c ki?m soát b?i m?t nhóm các cá nhân trong khi ph?n công khai du?c m? cho s? tham gia c?a b?t c? ai.
-Sidechains
-Ðây là m?t khái ni?m mà theo dó ti?n xu có th? du?c chuy?n t? m?t blockchain này sang m?t blockchain khác và chuy?n tr? l?i. S? d?ng ph? bi?n bao g?m vi?c t?o ra các altcoins m?i (ti?n di?n t? thay th?), theo dó ti?n xu du?c d?t cháy nhu là m?t b?ng ch?ng v? c? ph?n thích h?p. Có hai lo?i sidechain. Ví d? du?c cung c?p ? trên cho ti?n xu d?t du?c áp d?ng cho m?t sidechain ch?t m?t chi?u. Lo?i th? hai du?c g?i là m?t sidechain ch?t hai chi?u, cho phép chuy?n d?ng c?a ti?n xu t? chu?i chính d?n sidechain và quay tr? l?i chu?i chính khi c?n thi?t.
-S? cái du?c c?p phép
-M?t s? k? toán du?c phép là m?t blockchain nh? dó nh?ng ngu?i tham gia m?ng du?c bi?t và dáng tin c?y. S? cái du?c phép không c?n ph?i s? d?ng m?t co ch? d?ng thu?n phân tán, thay vào dó m?t giao th?c th?a thu?n có th? du?c s? d?ng d? duy trì m?t phiên b?n chia s? c?a s? th?t v? tr?ng thái c?a các b?n ghi trên blockchain. Cung không có yêu c?u cho m?t blockchain du?c phép d? du?c tu nhân vì nó có th? là m?t blockchain công c?ng nhung v?i ki?m soát truy c?p quy d?nh.
-S? cái phân tán
-Nhu tên cho th?y, s? k? toán này du?c phân ph?i gi?a nh?ng ngu?i tham gia c?a nó và tr?i r?ng trên nhi?u trang web ho?c t? ch?c. Lo?i này có th? là riêng tu ho?c công khai. Ý tu?ng chính là, không gi?ng nhu nhi?u blockchains khác, các b?n ghi du?c luu tr? liên t?c thay vì du?c s?p x?p thành các kh?i. Khái ni?m này du?c s? d?ng trong Ripple.
-S? cái du?c chia s?
-Ðây là thu?t ng? chung du?c s? d?ng d? mô t? b?t k? ?ng d?ng ho?c co s? d? li?u nào du?c chia s? b?i công chúng ho?c m?t t?p doàn.
-Blockchains hoàn toàn riêng tu và d?c quy?n
-Nh?ng blockchains này có l? không có ?ng d?ng chính th?ng khi chúng di ch?ch kh?i ý tu?ng c?t lõi v? phân c?p trong công ngh? blockchain. Tuy nhiên trong các cài d?t riêng tu c? th? trong m?t t? ch?c có th? c?n ph?i chia s? d? li?u và cung c?p m?t s? m?c d? b?o d?m v? tính xác th?c c?a d? li?u. Nh?ng blockchains này có th? h?u ích trong k?ch b?n dó. Ví d?, d? c?ng tác và chia s? d? li?u gi?a các co quan chính ph? khác nhau.
-Blockchains du?c mã hóa
-Nh?ng blockchains này là blockchains tiêu chu?n mà t?o ra ti?n di?n t? là k?t qu? c?a m?t quá trình d?ng thu?n thông qua khai thác ho?c thông qua phân ph?i ban d?u.
-Blockchains không có mã hóa
-Ðây có th? không ph?i là blockchains th?c vì chúng thi?u don v? chuy?n giao giá tr? co b?n nhung v?n có giá tr? trong nh?ng tình hu?ng không c?n chuy?n giá tr? gi?a các nút và ch? chia s? m?t s? d? li?u gi?a các bên dã tin c?y khác nhau. Trong ph?n ti?p theo, ý tu?ng d?ng thu?n t? quan di?m blockchain s? du?c th?o lu?n. S? d?ng thu?n là xuong s?ng c?a m?t blockchain và cung c?p s? phân quy?n ki?m soát nhu là k?t qu? thông qua m?t quá trình tùy ch?n du?c g?i là khai thác m?. S? l?a ch?n c?a thu?t toán d?ng thu?n cung du?c di?u ch?nh b?i lo?i blockchain du?c s? d?ng. Không ph?i t?t c? các co ch? d?ng thu?n d?u phù h?p v?i t?t c? các lo?i blockchains. Ví d?, trong các kh?i l?nh cho phép công khai, s? có ý nghia khi s? d?ng PoW thay vì m?t s? co ch? th?a thu?n co b?n mà có l? d?a trên b?ng ch?ng v? quy?n h?n. Do dó, c?n ch?n m?t thu?t toán d?ng thu?n phù h?p cho m?t d? án blockchain.
-Ð?ng thu?n trong blockchain
-Ð?ng thu?n v? co b?n là m?t khái ni?m di?n toán phân tán dã du?c s? d?ng trong blockchain d? cung c?p m?t phuong ti?n d?ng ý v?i m?t phiên b?n duy nh?t c?a s? th?t b?i t?t c? các d?ng nghi?p trên m?ng blockchain.
-Kho?ng hai lo?i co ch? d?ng thu?n sau dây t?n t?i:
-1. D?a trên b?ng ch?ng, d?a trên lãnh d?o, ho?c s? d?ng thu?n Nakamoto, theo dó m?t nhà lãnh d?o du?c b?u và d? xu?t m?t giá tr? cu?i cùng
-2. D?a trên kh? nang ch?u l?i c?a Byzantine, dây là phuong pháp truy?n th?ng d?a trên vòng phi?u b?u
-Các thu?t toán d?ng thu?n có s?n hi?n nay ho?c dang du?c nghiên c?u c?a blockchain sau dây:
-B?ng ch?ng công vi?c
-Lo?i co ch? d?ng thu?n này d?a vào b?ng ch?ng r?ng d? tài nguyên tính toán dã du?c chi tiêu tru?c khi d? xu?t m?t giá tr? cho s? ch?p nh?n c?a m?ng. Ði?u này du?c s? d?ng trong bitcoin và các lo?i ti?n di?n t? khác. Hi?n t?i, dây là thu?t toán duy nh?t dã ch?ng minh thành công dáng kinh ng?c tru?c các cu?c t?n công c?a Sybil.
-B?ng ch?ng v? c? ph?n
-Thu?t toán này ho?t d?ng trên ý tu?ng r?ng m?t nút ho?c ngu?i dùng có d? s? ti?n trong h? th?ng; ví d? ngu?i dùng dã d?u tu d? vào h? th?ng d? b?t k? n? l?c d?c h?i nào s? l?n hon l?i ích c?a vi?c th?c hi?n t?n công trên h? th?ng. Ý tu?ng này l?n d?u tiên du?c gi?i thi?u b?i Peercoin và s? du?c s? d?ng trong chu?i Ethereum. M?t khái ni?m quan tr?ng khác trong Proof of Stake (PoS) là tu?i d?ng xu, có ngu?n g?c t? s? lu?ng th?i gian và s? lu?ng ti?n xu chua du?c chi tiêu. Trong mô hình này, co h?i d? xu?t và ký k?t s? gia tang kh?i ti?p theo v?i th?i d?i ti?n xu.
-B?ng ch?ng v? ch?ng khoán
-B?ng ch?ng ch?ng nh?n quy?n s? h?u (DPOS) là m?t s? d?i m?i so v?i PoS tiêu chu?n, theo dó m?i nút có c? ph?n trong h? th?ng có th? ?y quy?n xác th?c giao d?ch cho các nút khác b?ng cách b? phi?u. Ði?u này du?c s? d?ng trong blockchain bithares.
-B?ng ch?ng v? th?i gian trôi qua
-Ðu?c Intel gi?i thi?u, nó s? d?ng Môi tru?ng th?c thi tin c?y (TEE) d? cung c?p s? ng?u nhiên và an toàn trong quá trình b?u c? lãnh d?o thông qua th?i gian ch? b?o d?m. Nó dòi h?i b? vi x? lý Intel SGX (Ph?n m?m b?o v? ph?n m?m m? r?ng) d? cung c?p b?o d?m an ninh và cho nó du?c b?o m?t.
-Ð?ng thu?n d?a trên ti?n g?i
-Các nút mu?n tham gia vào m?ng ph?i d?t vào m?t kho?n ti?n d?t c?c tru?c khi chúng có th? d? xu?t m?t kh?i.
-B?ng ch?ng v? t?m quan tr?ng
-Ý tu?ng này r?t quan tr?ng và khác v?i Proof of Stake. B?ng ch?ng v? t?m quan tr?ng không ch? ph? thu?c vào s? lu?ng c? ph?n mà ngu?i dùng có trong h? th?ng mà nó còn giám sát vi?c s? d?ng và di chuy?n th? c?a ngu?i dùng d? thi?t l?p m?c d? tin c?y và t?m quan tr?ng. Ði?u này du?c s? d?ng trong Nemcoin.
-Liên bang th?ng nh?t ho?c liên bang Byzantine d?ng thu?n
-Ðu?c s? d?ng trong giao th?c d?ng thu?n sao, các nút trong giao th?c này gi? m?t nhóm các d?ng nghi?p du?c tin c?y công khai và ch? truy?n bá nh?ng giao d?ch dã du?c xác th?c b?i ph?n l?n các nút dáng tin c?y.
-Co ch? d?a trên danh ti?ng
-Nhu tên cho th?y, m?t nhà lãnh d?o du?c b?u trên co s? danh ti?ng mà nó dã xây d?ng theo th?i gian trên m?ng. Ði?u này có th? d?a trên vi?c b? phi?u t? các thành viên khác.
-Dung sai l?i Byzantine th?c t?
-Th?c t? Byzantine Fault Tolerance (PBFT) d?t du?c s? sao chép máy nhà nu?c, cung c?p kh? nang ch?ng l?i các nút Byzantine. Các giao th?c khác, bao g?m nhung không gi?i h?n PBFT, PAXOS, RAFT, và Hi?p d?nh Byzantine Liên bang (FBA), cung dang du?c s? d?ng ho?c dã du?c d? xu?t s? d?ng trong nhi?u tri?n khai khác nhau c?a h? th?ng phân tán và ngan ch?n.
-Ð?nh lý CAP và blockchain
-K? l? thay, có v? nhu d?nh lý CAP b? vi ph?m trong blockchain, và d?c bi?t là trong vi?c th?c hi?n thành công nh?t: bitcoin, nhung dây không ph?i là tru?ng h?p. Trong blockchains nh?t quán du?c hy sinh trong l?i c?a s?n có và dung sai phân vùng. Trong tru?ng h?p này, nh?t quán (C) trên blockchain không d?t du?c d?ng th?i v?i dung sai phân vùng (P) và tính kh? d?ng (A), nhung nó d?t du?c theo th?i gian. Ði?u này du?c g?i là tính nh?t quán cu?i cùng, trong dó tính nh?t quán d?t du?c là k?t qu? c?a quá trình xác nh?n t? nhi?u nút theo th?i gian. Vì m?c dích này, khái ni?m khai thác du?c gi?i thi?u b?ng bitcoin; dây là m?t quá trình t?o di?u ki?n cho s? thành công c?a s? d?ng thu?n b?ng cách s? d?ng m?t thu?t toán d?ng thu?n du?c g?i là PoW. ? m?t m?c d? cao hon, khai thác có th? du?c d?nh nghia là m?t quá trình du?c s? d?ng d? thêm nhi?u kh?i vào blockchain.
-L?i ích và h?n ch? c?a blockchain
-Nhi?u l?i ích c?a công ngh? blockchain dang du?c th?o lu?n trong ngành công nghi?p và du?c d? xu?t b?i các nhà lãnh d?o tu tu?ng trên kh?p th? gi?i trong không gian blockchain. 10 l?i ích hàng d?u du?c li?t kê và th?o lu?n nhu sau:
-Phân c?p
-Ðây là m?t khái ni?m c?t lõi và l?i ích c?a blockchain. Không c?n bên th? ba ho?c trung gian dáng tin c?y xác th?c giao d?ch; thay vào dó, m?t co ch? d?ng thu?n du?c s? d?ng d? d?ng ý v? tính h?p l? c?a các giao d?ch.
-Minh b?ch và tin tu?ng
-Khi các blockchains du?c chia s? và m?i ngu?i có th? th?y nh?ng gì có trong blockchain, di?u này cho phép h? th?ng du?c minh b?ch và k?t qu? là s? tin tu?ng du?c thi?t l?p. Ði?u này có liên quan nhi?u hon trong các tình hu?ng nhu gi?i ngân ti?n ho?c l?i ích mà theo ý riêng c?a b?n nên b? h?n ch?.
-Tính không thay d?i
-M?t khi d? li?u dã du?c ghi vào blockchain, r?t khó d? thay d?i nó tr? l?i. Nó không th?c s? b?t bi?n nhung, do th?c t? là vi?c thay d?i d? li?u là vô cùng khó khan và h?u nhu không th?, dây du?c coi là m?t l?i ích d? duy trì m?t s? cái b?t bi?n c?a các giao d?ch.
-Tính kh? d?ng cao
-Khi h? th?ng d?a trên hàng nghìn nút trong m?ng ngang hàng, và d? li?u du?c sao chép và c?p nh?t trên m?i và m?i nút, h? th?ng tr? nên có s?n cao. Ngay c? khi các nút r?i kh?i m?ng ho?c không th? truy c?p du?c, toàn b? m?ng v?n ti?p t?c ho?t d?ng, do dó làm cho m?ng tr? nên kh? d?ng cao.
-Ð? an toàn cao
-T?t c? các giao d?ch trên m?t blockchain du?c b?o m?t b?ng mã hóa và cung c?p tính toàn v?n
-Ðon gi?n hóa các mô hình hi?n t?i
-Mô hình hi?n t?i trong nhi?u ngành nhu tài chính ho?c y t? là khá thi?u t? ch?c, trong dó nhi?u th?c th? duy trì co s? d? li?u c?a riêng h? và chia s? d? li?u có th? tr? nên r?t khó khan do tính ch?t khác nhau c?a các h? th?ng. Nhung nhu m?t blockchain có th? ph?c v? nhu m?t s? k? toán du?c chia s? gi?a các bên quan tâm, di?u này có th? d?n d?n vi?c don gi?n hóa mô hình này b?ng cách gi?m s? ph?c t?p c?a vi?c qu?n lý các h? th?ng riêng bi?t du?c duy trì b?i m?i th?c th?.
-Giao d?ch nhanh hon
-Trong ngành tài chính, d?c bi?t là trong các ch?c nang thanh toán sau thuong m?i, blockchain có th? dóng vai trò quan tr?ng b?ng cách cho phép gi?i quy?t nhanh hon các giao d?ch vì nó không dòi h?i quá trình xác minh, hòa gi?i và gi?i phóng m?t b?ng. dã có s?n trên s? k? toán du?c chia s? gi?a các t? ch?c tài chính.
-Ti?t ki?m chi phí
-Vì không có bên th? ba ho?c nhà thanh toán bù tr? du?c yêu c?u trong mô hình blockchain, di?u này có th? lo?i b? m?t cách ? ?t chi phí trên không theo hình th?c phí du?c thanh toán d? thanh toán bù tr? nhà ? ho?c bên th? ba dáng tin c?y.
-Nh?ng thách th?c và h?n ch? c?a công ngh? blockchain
-Nhu v?i b?t k? công ngh? nào có nh?ng thách th?c c?n du?c gi?i quy?t d? làm cho m?t h? th?ng m?nh m? hon, h?u ích và d? ti?p c?n hon. Công ngh? Blockchain cung không ngo?i l?; trong th?c t? r?t nhi?u n? l?c dang du?c th?c hi?n trong Academia và Công nghi?p d? vu?t qua nh?ng thách th?c d?t ra b?i công ngh? blockchain. M?t l?a ch?n nh?ng thách th?c nh?y c?m nh?t du?c trình bày nhu sau:
-- Kh? nang m? r?ng
-- Kh? nang thích ?ng
-- Quy d?nh
-- Công ngh? tuong d?i chua tru?ng thành
-- Riêng tu
+    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
+    private ChatController chatController;
+    private BluetoothDevice connectingDevice;
+    private ArrayAdapter<String> discoveredDevicesAdapter;
 
-Chuong 2. Phân c?p, bao g?m các khái ni?m phân c?p và m?i quan h? c?a nó v?i công ngh? blockchain. Các phuong pháp và n?n t?ng khác nhau có th? du?c s? d?ng d? phân c?p m?t quy trình ho?c h? th?ng.
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-Phân c?p b?ng cách s? d?ng blockchain
-Phân c?p là m?t l?i ích c?t lõi và d?ch v? du?c cung c?p b?i công ngh? blockchain. Blockchain theo thi?t k? là m?t phuong ti?n hoàn h?o d? cung c?p m?t n?n t?ng không c?n b?t k? trung gian và có th? ho?t d?ng v?i nhi?u nhà lãnh d?o khác nhau du?c l?a ch?n thông qua các co ch? d?ng thu?n. Mô hình này cho phép b?t c? ai c?nh tranh d? tr? thành co quan ra quy?t d?nh.
-Công ngh? thông tin và truy?n thông (ICT) thu?ng du?c d?a trên m?t t?p trung
-mô hình theo dó các co s? d? li?u ho?c các máy ch? ?ng d?ng n?m du?i s? ki?m soát c?a m?t co quan trung uong, ch?ng h?n nhu ngu?i qu?n tr? h? th?ng. V?i bitcoin và s? ra d?i c?a công ngh? blockchain, mô hình này có thay d?i và bây gi? là công ngh? cho phép b?t k? ai b?t d?u m?t h? th?ng phân quy?n (và v?n hành nó không có di?m duy nh?t c?a s? th?t b?i ho?c co quan dáng tin c?y duy nh?t) có s?n. Nó có th? du?c ch?y t? ch? ho?c b?ng cách yêu c?u m?t s? can thi?p c?a con ngu?i tùy thu?c vào lo?i và mô hình qu?n tr? du?c s? d?ng trong ?ng d?ng phi t?p trung ch?y trên blockchain.
- 
-Các lo?i m?ng / h? th?ng khác nhau
-S? khác bi?t chính gi?a h? th?ng phân tán và h? th?ng phân tán là trong h? th?ng phân tán, v?n t?n t?i m?t co quan trung uong di?u ch?nh toàn b? h? th?ng, trong khi trong h? th?ng phi t?p trung, không có quy?n nào t?n t?i. M?t h? th?ng phân c?p là m?t lo?i m?ng, theo dó các nút không ph? thu?c vào m?t nút chính duy nh?t; thay vào dó, ki?m soát du?c phân ph?i gi?a nhi?u nút. Ví d?, di?u này tuong t? nhu m?t mô hình trong dó m?i b? ph?n trong m?t t? ch?c có máy ch? co s? d? li?u riêng c?a h?, do dó l?y di s?c m?nh t? máy ch? trung tâm và phân ph?i nó t?i các phòng ban qu?n lý co s? d? li?u c?a riêng h?. M?t s? d?i m?i th?c s? trong mô hình phân c?p dã b?t d?u k? nguyên m?i c?a các ?ng d?ng phi t?p trung hóa là s? d?ng thu?n phi t?p trung, du?c gi?i thi?u v?i bitcoin. Ði?u này cho phép ngu?i dùng d?ng ý v? di?u gì dó thông qua thu?t toán d?ng thu?n mà không c?n m?t bên th? ba, trung gian ho?c nhà cung c?p d?ch v? tin c?y trung tâm.
-Phuong pháp phân c?p
-Có hai phuong pháp có th? du?c s? d?ng d? d?t du?c phân c?p. Nh?ng phuong pháp dó là:
-Không qua trung gian
-Ði?u này có th? du?c gi?i thích v?i s? giúp d? c?a m?t ví d?. Hãy tu?ng tu?ng b?n mu?n g?i ti?n cho b?n bè c?a b?n ? m?t qu?c gia khác. B?n d?n m?t ngân hàng s? chuy?n ti?n c?a b?n d?n ngân hàng ? qu?c gia b?n ch?n v?i m?t kho?n phí. Trong tru?ng h?p này, ngân hàng gi? m?t co s? d? li?u trung tâm du?c c?p nh?t, xác nh?n r?ng b?n dã g?i ti?n. V?i công ngh? blockchain, b?n có th? g?i ti?n tr?c ti?p cho b?n bè mà không c?n ngân hàng. T?t c? nh?ng gì b?n c?n là d?a ch? c?a b?n bè c?a b?n trên blockchain. B?ng cách này, ngu?i trung gian không còn c?n thi?t và phân c?p du?c th?c hi?n b?ng cách gi?i th?. Tuy nhiên, có th? tranh lu?n cách phân c?p th?c t? trong linh v?c tài chính b?ng cách gi?i th? do các yêu c?u v? tuân th? và quy d?nh n?ng n?. Tuy nhiên, mô hình này có th? du?c s? d?ng không ch? trong tài chính mà còn trong nhi?u ngành công nghi?p khác nhau.
-Thông qua c?nh tranh
-Trong phuong pháp này, m?t nhóm các nhà cung c?p d?ch v? c?nh tranh v?i nhau d? du?c l?a ch?n cho vi?c cung c?p các d?ch v? c?a h? th?ng. Mô hình này không d?t du?c s? phân quy?n hoàn toàn, nhung ? m?t m?c d? nh?t d?nh d?m b?o r?ng m?t nhà cung c?p trung gian ho?c d?ch v? không d?c quy?n d?ch v?. Trong b?i c?nh công ngh? blockchain, m?t h? th?ng có th? du?c hình dung trong dó các h?p d?ng thông minh có th? ch?n m?t nhà cung c?p d? li?u bên ngoài t? m?t s? lu?ng l?n các nhà cung c?p d?a trên danh ti?ng, di?m s?, dánh giá và ch?t lu?ng d?ch v? tru?c dó. Ði?u này s? không d?n d?n vi?c phân quy?n hoàn toàn, nhung nó cho phép các h?p d?ng thông minh t?o ra s? l?a ch?n mi?n phí d?a trên các tiêu chí du?c d? c?p tru?c dó. B?ng cách này, m?t môi tru?ng c?nh tranh du?c canh tác gi?a các nhà cung c?p d?ch v?, theo dó h? c?nh tranh v?i nhau d? tr? thành nhà cung c?p d? li?u du?c l?a ch?n. Trong so d? sau, các m?c phân c?p khác nhau du?c hi?n th?. ? phía bên trái, có m?t cách ti?p c?n thông thu?ng, noi m?t h? th?ng trung tâm n?m trong t?m ki?m soát; ? phía bên tay ph?i, hoàn thành vi?c gi?i th?; và ? gi?a, trung gian c?nh tranh ho?c các nhà cung c?p d?ch v? du?c hi?n th?. ? gi?a, trung gian ho?c nhà cung c?p d?ch v? du?c l?a ch?n d?a trên danh ti?ng ho?c b? phi?u, do dó d?t du?c phân c?p m?t ph?n.
-Các tuy?n d? phân c?p
-M?c dù có các h? th?ng t?n t?i tru?c bitcoin ho?c blockchain có th? du?c phân lo?i nhu phân c?p ? m?t m?c d? nh?t d?nh, ch?ng h?n nhu chia s? t?p BitTorrent ho?c Gnutella, v?i s? ra d?i c?a công ngh? blockchain nhi?u sáng ki?n dang du?c th?c hi?n d? t?n d?ng công ngh? m?i này d? phân c?p . Thông thu?ng, blockchain bitcoin là s? l?a ch?n d?u tiên cho nhi?u ngu?i vì nó dã du?c ch?ng minh là blockchain b?n v?ng và an toàn nh?t v?i v?n hóa th? tru?ng g?n 12 t? dô la. Phuong án thay th?
-cách ti?p c?n là s? d?ng các blockchains khác, ch?ng h?n nhu Ethereum, hi?n là công c? du?c nhi?u nhà phát tri?n l?a ch?n d? xây d?ng các ?ng d?ng phi t?p trung.
-Cách phân c?p
-M?t khuôn kh? dã du?c d? xu?t b?i Arvind Narayanan và các khuôn kh? khác có th? du?c s? d?ng d? dánh giá các yêu c?u phân c?p c?a nhi?u th? trong b?i c?nh công ngh? blockchain. Khuôn kh? co b?n d? xu?t b?n câu h?i mà, m?t khi du?c tr? l?i, cung c?p m?t ý tu?ng rõ ràng v? cách m?t h? th?ng có th? du?c phân c?p. Nh?ng câu h?i này du?c li?t kê nhu sau:
-1. Ði?u gì dang du?c phân c?p?
-2. C?p d? phân c?p là c?n thi?t?
-3. Blockchain nào du?c s? d?ng?
-4. Co ch? b?o m?t nào du?c s? d?ng?
-Câu h?i d?u tiên don gi?n là h?i h? th?ng nào dang du?c phân c?p. Ðây có th? là b?t k? h? th?ng nào, ví d? nhu h? th?ng nh?n d?ng ho?c giao d?ch. Câu h?i ti?p theo có th? du?c tr? l?i b?ng cách xác d?nh m?c phân c?p c?n thi?t b?ng cách xem xét quy mô phân c?p dã th?o lu?n tru?c dó. Nó có th? du?c disintermediation d?y d? ho?c m?t ph?n disintermediation. Câu h?i th? ba là khá don gi?n, noi mà các nhà phát tri?n có th? dua ra l?a ch?n là blockchain nào phù h?p v?i m?t ?ng d?ng c? th?. Nó có th?
-du?c blockchain bitcoin, blockchain Ethereum, ho?c b?t k? blockchain khác du?c coi là phù h?p cho m?t ?ng d?ng c? th?. Cu?i cùng, m?t câu h?i quan tr?ng c?n ph?i du?c tr? l?i v? co ch? b?o m?t v? cách b?o d?m an ninh c?a m?t h? th?ng phân c?p có th? du?c d?m b?o. Nó có th? là Atomicity, ví d?, theo dó giao d?ch th?c hi?n d?y d? ho?c không th?c thi gì c?. Nói cách khác, dó là t?t c? ho?c không có gì. Ði?u này d?m b?o tính toàn v?n c?a h? th?ng. Các co ch? khác có th? bao g?m danh ti?ng, cho phép m?c d? tin c?y khác nhau trong m?t h? th?ng.
-Blockchain và phân c?p h? sinh thái d?y d?
-Ð? d?t du?c s? phân c?p hoàn ch?nh, nó là c?n thi?t r?ng môi tru?ng xung quanh blockchain cung du?c phân c?p. Blockchain chính nó là m?t s? k? toán phân ph?i ch?y trên d?u trang c?a các h? th?ng thông thu?ng. Các y?u t? này bao g?m luu tr?, giao ti?p và tính toán. Có nh?ng y?u t? khác, ch?ng h?n nhu danh tính và s? giàu có, theo truy?n th?ng d?a trên các mô hình t?p trung và có nhu c?u phân c?p các khía c?nh này d? d?t du?c m?t h? sinh thái phân c?p hoàn toàn.
-Luu tr?
-D? li?u có th? du?c luu tr? tr?c ti?p trong m?t blockchain, và v?i di?u này, nó d?t du?c s? phân c?p, nhung m?t b?t l?i l?n c?a phuong pháp này là blockchain không thích h?p d? luu tr? m?t lu?ng l?n d? li?u theo thi?t k?. Nó có th? luu tr? các giao d?ch don gi?n và m?t s? d? li?u tùy ý nhung ch?c ch?n không thích h?p d? luu tr? hình ?nh ho?c các kh?i d? li?u l?n, nhu tru?ng h?p trong các h? th?ng co s? d? li?u truy?n th?ng. M?t l?a ch?n t?t hon là s? d?ng các b?ng bam du?c phân ph?i (DHT).
-Giao ti?p
-Nó thu?ng du?c coi là Internet (l?p giao ti?p trong blockchain) du?c phân c?p. Ði?u này dúng ? m?t m?c d? nào dó vì t?m nhìn ban d?u c?a Internet là phát tri?n m?t h? th?ng phi t?p trung. Các d?ch v? nhu e-mail và luu tr? tr?c tuy?n d?u d?a trên mô hình noi nhà cung c?p d?ch v? ki?m soát và ngu?i dùng tin tu?ng h? d? cung c?p cho h? quy?n truy c?p vào d?ch v? khi du?c yêu c?u. Mô hình này d?a trên s? tin c?y c?a co quan trung uong (nhà cung c?p d?ch v?) và ngu?i dùng không ki?m soát du?c d? li?u c?a h?; th?m chí m?t kh?u du?c luu tr? trên các h? th?ng c?a bên th? ba dáng tin c?y. Có nhu c?u cung c?p quy?n ki?m soát cho t?ng ngu?i dùng theo cách truy c?p d? li?u c?a h? du?c b?o d?m và không ph? thu?c vào m?t bên th? ba. Truy c?p Internet (l?p giao ti?p) d?a trên các nhà cung c?p d?ch v? Internet (ISP) ho?t d?ng nhu m?t trung tâm trung tâm cho ngu?i dùng Internet. N?u ISP b? dóng c?a vì lý do chính tr? ho?c b?t k? lý do nào khác, thì không th? k?t n?i v?i mô hình này. M?t cách khác là s? d?ng các m?ng lu?i. M?c dù chúng b? h?n ch? v? ch?c nang so v?i Internet, chúng v?n cung c?p m?t s? thay th? phi t?p trung noi các nút có th? nói chuy?n tr?c ti?p v?i nhau mà không c?n m?t trung tâm trung tâm nhu m?t ISP.
-Tính toán
-Phân c?p máy tính ho?c x? lý d?t du?c b?ng công ngh? blockchain nhu Ethereum, noi các h?p d?ng thông minh v?i logic nghi?p v? nhúng có th? ch?y trên m?ng. Các công ngh? blockchain khác cung cung c?p các n?n t?ng l?p x? lý tuong t?, noi logic nghi?p v? có th? ch?y qua m?ng theo cách phi t?p trung.
-So d? du?i dây cho th?y t?ng quan h? sinh thái phân c?p, ? t?ng du?i cùng, Internet ho?c Meshnets cung c?p m?t l?p giao ti?p phi t?p trung, sau dó m?t t?ng luu tr? s? d?ng các công ngh? nhu IPFS và BigChainDB d? cho phép phân c?p, và cu?i cùng, b?n s? th?y blockchain l?p x? lý phân c?p. Blockchain có th?, trong m?t cách h?n ch?, cung c?p m?t l?p luu tr? quá, nhung nghiêm túc c?n tr? t?c d? và nang l?c c?a h? th?ng; do dó, các gi?i pháp khác nhu IPFS và BigChainDB phù h?p hon d? luu tr? lu?ng l?n d? li?u theo cách phân c?p. ? trên cùng, các l?p Identity và Wealth du?c hi?n th?. Nh?n d?ng trên Internet là m?t ch? d? r?t l?n và các h? th?ng nhu bitAuth và OpenID dã cung c?p d?ch v? xác th?c và nh?n d?ng v?i các m?c d? phân c?p và gi? d?nh b?o m?t khác nhau. Blockchain có kh? nang cung c?p các gi?i pháp cho các v?n d? khác nhau. M?t khái ni?m liên quan d?n Identity g?i là Tam giác c?a Zooko dòi h?i m?t h? th?ng d?t tên trong m?t giao th?c m?ng du?c an toàn, phân c?p và có ý nghia d?i v?i con ngu?i. Ngu?i ta ph?ng doán r?ng m?t h? th?ng ch? có th? có hai trong s? các thu?c tính này cùng m?t lúc, nhung v?i s? ra d?i c?a blockchain, ? d?ng Namecoin, v?n d? này dã du?c gi?i quy?t. Tuy nhiên, di?u này không ph?i là thu?c ch?a bách b?nh và di kèm v?i nh?ng thách th?c riêng c?a nó, ch?ng h?n nhu s? ph? thu?c vào ngu?i dùng d? luu tr? và duy trì khóa cá nhân m?t cách an toàn. Ði?u này m? ra các câu h?i chung khác v? s? phù h?p c?a phân c?p. Có l? vi?c phân c?p không phù h?p trong m?i tình hu?ng. Các h? th?ng t?p trung t?t s? có xu hu?ng ho?t d?ng t?t hon trong nhi?u tru?ng h?p.
- 
-H?p d?ng thông minh
-M?t h?p d?ng thông minh có th? du?c coi là m?t chuong trình phân c?p nh?. H?p d?ng thông minh không nh?t thi?t c?n m?t blockchain d? ch?y; tuy nhiên, do nh?ng l?i ích b?o m?t mà công ngh? blockchain cung c?p, nó bây gi? tr? thành m?t tiêu chu?n d? s? d?ng blockchain nhu m?t n?n t?ng th?c thi phi t?p trung cho các h?p d?ng thông minh. M?t h?p d?ng thông minh thu?ng ch?a m?t s? logic nghi?p v? và m?t lu?ng d? li?u h?n ch?. Các di?n viên ho?c ngu?i tham gia trong blockchain s? d?ng các h?p d?ng thông minh này ho?c h? t? ch? thay m?t cho nh?ng ngu?i tham gia m?ng. Các chuong trình nh? này n?m trên blockchain và th?c hi?n logic nghi?p v? n?u m?t s? tiêu chí c? th? du?c dáp ?ng. Thông tin thêm v? h?p d?ng thông minh s? du?c cung c?p trong Chuong 6, H?p d?ng thông minh, du?c dành riêng cho m?t cu?c th?o lu?n chi ti?t v? các h?p d?ng thông minh.
-T? ch?c phi t?p trung (Decentralized organizations)
-T? ch?c phi t?p trung (DOs) là các chuong trình ph?n m?m ch?y trên m?t blockchain và d?a trên ý tu?ng c?a các t? ch?c con ngu?i th?c s? v?i con ngu?i và các giao th?c. Khi DO, theo hình th?c c?a m?t h?p d?ng thông minh ho?c m?t t?p h?p các h?p d?ng thông minh, du?c thêm vào blockchain, nó tr? thành phi t?p trung và các bên tuong tác v?i nhau d?a trên mã du?c xác d?nh trong ph?n m?m DO.
-T? ch?c t? tr? phân c?p (Decentralized autonomous organizations)
-Cung gi?ng nhu DOs, m?t t? ch?c t? qu?n phân c?p (DAO) cung là m?t chuong trình máy tính hon là ch?y trên m?t blockchain và du?c nhúng bên trong nó là các quy t?c qu?n tr? và logic nghi?p v?. DAO và DO v? co b?n gi?ng nhau, nhung s? khác bi?t chính là DAO là t? tr?, có nghia là chúng hoàn toàn t? d?ng và ch?a logic thông minh gi? t?o, trong khi DO thi?u tính nang này và d?a vào d?u vào c?a con ngu?i d? th?c hi?n logic nghi?p v?. Ethereum blockchain d?n d?u v?i s? ra d?i c?a DAOs l?n d?u tiên. Trong DAO, mã du?c coi là th?c th? qu?n lý ch? không ph?i là con ngu?i ho?c h?p d?ng gi?y. M?t Curator, tuy nhiên, là m?t th?c th? con ngu?i tham gia nhu m?t ngu?i duy trì mã này và ho?t d?ng nhu m?t ngu?i dánh giá d? xu?t cho c?ng d?ng. DAO có kh? nang thuê các nhà th?u bên ngoài n?u d? d?u vào du?c nh?n t? các ch? th? (ngu?i tham gia).
-N?n t?ng cho phân c?p
-Có r?t nhi?u n?n t?ng có s?n d? phân c?p ngay bây gi?. Nhi?u công ty trên kh?p th? gi?i dã gi?i thi?u các n?n t?ng h?a h?n s? giúp phát tri?n ?ng d?ng phân tán d? dàng, d? truy c?p và b?o m?t cho ngu?i dùng. M?t s? tên n?i b?t du?c th?o lu?n ? dây.
+        setContentView(R.layout.activity_main);
+        findViewsByIds();s
 
-Chuong 3, M?t mã và Co s? k? thu?t, gi?i thi?u m?t mã co s? lý thuy?t, c?n thi?t d? hi?u d?y d? v? công ngh? blockchain. Các khái ni?m nhu m?t mã khóa công khai và riêng tu, v?i các ví d? th?c t?.
-Gi?i thi?u
-M?t mã h?c là khoa h?c làm cho thông tin an toàn trong s? hi?n di?n c?a các d?i th?. Nó cung c?p m?t phuong ti?n giao ti?p an toàn trong s? hi?n di?n c?a các d?i th? v?i các ngu?n tài nguyên vô h?n. M?t mã du?c s? d?ng d? mã hóa d? li?u d? n?u b? ch?n b?i k? thù, d? li?u là vô nghia d?i v?i chúng mà không c?n gi?i mã, yêu c?u khóa bí m?t. M?t mã thu?ng du?c s? d?ng d? cung c?p m?t d?ch v? b?o m?t. Ngày c?a riêng nó, nó không th? du?c coi là m?t gi?i pháp hoàn ch?nh nhung ph?c v? nhu là m?t kh?i xây d?ng quan tr?ng trong m?t h? th?ng an ninh l?n hon d? gi?i quy?t m?t v?n d? an ninh. M?t mã h?c cung c?p các d?ch v? b?o m?t khác nhau, ch?ng h?n nhu B?o m?t, Liêm chính, Xác th?c, (Xác th?c d?i tu?ng và Xác th?c ngu?n g?c d? li?u) và không t? ch?i. Ngoài ra, trách nhi?m gi?i trình cung du?c yêu c?u trong các h? th?ng b?o m?t khác nhau.
-Toán h?c
-Là d?i tu?ng c?a m?t mã d?a trên toán h?c, ph?n này s? gi?i thi?u m?t s? khái ni?m co b?n s? giúp b?n hi?u các khái ni?m sau này trong chuong.
-B?
-T?p h?p là m?t t?p h?p các d?i tu?ng riêng bi?t, ví d?: X = {1, 2, 3, 4, 5}.
-Nhóm
-M?t nhóm là m?t nhóm giao hoán v?i m?t thao tác k?t h?p hai ph?n t? c?a t?p h?p. Ho?t d?ng nhóm du?c dóng và liên k?t v?i ph?n t? nh?n d?ng du?c xác d?nh. Ngoài ra, m?i ph?n t? trong t?p h?p có m?t ngh?ch d?o. Ðóng (dóng) có nghia là n?u, ví d?, các ph?n t? A và B n?m trong t?p h?p, thì ph?n t? k?t qu? sau khi th?c hi?n thao tác trên các ph?n t? cung n?m trong t?p h?p. K?t h?p nghia là vi?c nhóm các ph?n t? không ?nh hu?ng d?n k?t qu? c?a phép toán.
-Tru?ng
-Tru?ng là t?p h?p ch?a c? nhóm c?ng và nhóm nhân. Chính xác hon, t?t c? các ph?n t? trong t?p h?p t?o thành m?t nhóm c?ng và nhân. Nó dáp ?ng các tiên d? c? th? d? b? sung và nhân lên. Ð?i v?i t?t c? các ho?t d?ng c?a nhóm, lu?t phân ph?i cung du?c áp d?ng. Lu?t quy d?nh r?ng cùng m?t kho?n ti?n ho?c s?n ph?m s? du?c s?n xu?t ngay c? khi b?t k? di?u kho?n ho?c y?u t? nào du?c s?p x?p l?i.
-M?t tru?ng h?u h?n
-M?t tru?ng h?u h?n là m?t tru?ng có t?p các ph?n t? h?u h?n. Còn du?c g?i là tru?ng Galois, các c?u trúc này có t?m quan tr?ng d?c bi?t trong m?t mã h?c vì chúng có th? du?c s? d?ng d? t?o ra k?t qu? chính xác và không có l?i c?a phép tính s? h?c. Ví d?, các tru?ng h?u h?n chính du?c s? d?ng trong mã hóa du?ng cong elip d? xây d?ng v?n d? logarit r?i r?c.
-Th? t?
-Ðây là s? ph?n t? trong m?t tru?ng.
-Các tru?ng chính
-Ðây là m?t tru?ng h?u h?n v?i s? nguyên t? chính. Nó có các quy t?c c? th? cho phép c?ng và phép nhân, và m?i ph?n t? nonzero trong tru?ng có ngh?ch d?o. Phép c?ng và phép nhân du?c th?c hi?n modulo p.
-Vòng
-N?u có th? xác d?nh nhi?u thao tác trên m?t nhóm abelian, nhóm dó s? tr? thành m?t vòng. Ngoài ra còn có m?t s? d?c tính c?n du?c th?a mãn. M?t vòng ph?i có các d?c tính dóng và liên k?t và phân ph?i.
-M?t nhóm tu?n hoàn
-M?t nhóm tu?n hoàn là m?t ki?u nhóm có th? du?c t?o ra b?i m?t ph?n t? don l? du?c g?i là b? t?o nhóm. Nói cách khác, n?u thao tác nhóm du?c áp d?ng nhi?u l?n cho m?t ph?n t? c? th? trong nhóm, thì t?t c? các ph?n t? trong nhóm có th? du?c t?o ra.
-M?t nhóm abelian
-M?t nhóm abelian du?c hình thành khi ho?t d?ng trên các ph?n t? c?a m?t t?p h?p là giao hoán. Lu?t giao hoán v? co b?n có nghia là thay d?i th? t? c?a các y?u t? không ?nh hu?ng d?n k?t qu? c?a ho?t d?ng, ví d?, A X B = B X A.
-S? h?c mô-dun
-Còn du?c g?i là s? h?c d?ng h?, s? trong mô-dun s? h?c qu?n quanh khi chúng d?t d?n m?t s? c? d?nh nh?t d?nh. S? c? d?nh này là s? duong du?c g?i là mô dun và t?t c? các ho?t d?ng du?c th?c hi?n liên quan d?n s? c? d?nh này. Trong m?t tuong t? v?i m?t d?ng h?, có s? t? 1 d?n 12. Khi nó d?t d?n 12, s? 1 b?t d?u m?t l?n n?a. Nói cách khác, s? h?c này d? c?p d?n các ph?n du sau khi ho?t d?ng phân chia. Ví d?, 50 mod 11 là 6 vì 50/11 d? l?i ph?n còn l?i c?a 6. Ði?u này hoàn thành m?t gi?i thi?u co b?n v? m?t s? khái ni?m toán h?c; trong ph?n ti?p theo, b?n s? du?c gi?i thi?u v? m?t mã.
-M?t mã h?c
-M?t mã cung c?p các d?ch v? b?o m?t khác nhau và các d?ch v? b?o m?t.
-B?o m?t
-B?o m?t là s? d?m b?o r?ng thông tin ch? có s?n cho các th?c th? du?c ?y quy?n.
-Tính toàn v?n
-Tính toàn v?n là s? d?m b?o r?ng thông tin ch? có th? du?c s?a d?i b?i các th?c th? du?c ?y quy?n.
-Xác th?c
-Xác th?c cung c?p s? d?m b?o v? danh tính c?a m?t th?c th? ho?c tính h?p l? c?a m?t thông báo. Có hai lo?i xác th?c, du?c th?o lu?n ? dây.
-Không bác b?
-Không bác b? là d?m b?o r?ng m?t th?c th? không th? t? ch?i m?t cam k?t ho?c hành d?ng tru?c dó b?ng cách cung c?p b?ng ch?ng không th? tha th?. Ðây là m?t d?ch v? b?o m?t cung c?p b?ng ch?ng không th? tha th? cho th?y m?t hành d?ng c? th? dã x?y ra. Thu?c tính này là r?t c?n thi?t trong các tình hu?ng có th? tranh ch?p, theo dó m?t th?c th? dã t? ch?i các hành d?ng du?c th?c hi?n, ví d?, d?t hàng trên m?t h? th?ng thuong m?i di?n t?. D?ch v? này t?o ra b?ng ch?ng m?t mã trong các giao d?ch di?n t? d? trong tru?ng h?p có tranh ch?p, nó có th? du?c s? d?ng nhu m?t xác nh?n c?a m?t hành d?ng. Không t? ch?i dã là m?t khu v?c nghiên c?u tích c?c trong nhi?u nam. Tranh ch?p trong giao d?ch di?n t? là m?t v?n d? ph? bi?n và c?n ph?i gi?i quy?t chúng d? tang m?c d? tin c?y c?a ngu?i tiêu dùng trong d?ch v?.
-Trách nhi?m gi?i trình
-Trách nhi?m gi?i trình là s? d?m b?o r?ng các hành d?ng ?nh hu?ng d?n an ninh có th? du?c truy ngu?n t? bên ch?u trách nhi?m. Ði?u này thu?ng du?c cung c?p b?ng cách dang nh?p và ki?m tra các co ch? trong các h? th?ng c?n ki?m toán chi ti?t do tính ch?t c?a doanh nghi?p, ví d?, trong các h? th?ng giao d?ch di?n t?. Các b?n ghi chi ti?t r?t quan tr?ng d? theo dõi các hành d?ng c?a m?t th?c th?, ví d?, khi m?t giao d?ch du?c d?t trong m?t b?n ghi ki?m tra có ngày và th?i gian, danh tính c?a th?c th? du?c t?o và luu trong t?p nh?t ký. T?p nh?t ký này có th?
-tùy ch?n du?c mã hóa và có th? là m?t ph?n c?a co s? d? li?u ho?c t?p nh?t ký van b?n ASCII d?c l?p trên m?t h? th?ng.
-Các mã hóa nguyên th?y
-Các mã hóa nguyên th?y là các kh?i xây d?ng co b?n c?a m?t giao th?c ho?c h? th?ng b?o m?t. Trong ph?n sau, b?n du?c gi?i thi?u các thu?t toán mã hóa c?n thi?t cho vi?c xây d?ng các giao th?c và h? th?ng an toàn. Giao th?c b?o m?t là m?t t?p h?p các bu?c du?c th?c hi?n d? d?t du?c m?c tiêu b?o m?t c?n thi?t b?ng cách s? d?ng các co ch? b?o m?t thích h?p. Các lo?i giao th?c b?o m?t khác nhau dang du?c s? d?ng, ch?ng h?n nhu các giao th?c xác th?c, các giao th?c không lo?i b? và các giao th?c qu?n lý khóa. M?t mô hình m?t mã chung du?c th? hi?n trong so d? sau:
- 
-Entity: Ðây là ngu?i ho?c h? th?ng g?i, nh?n ho?c th?c hi?n các thao tác trên d? li?u
-Sender: Ngu?i g?i là m?t th?c th? truy?n d? li?u
-Receiver: Ngu?i nh?n là m?t th?c th? nh?n d? li?u
-Adversary: Ðây là m?t th?c th? c? g?ng phá v? d?ch v? b?o m?t
-Key: Khóa là m?t s? d? li?u du?c s? d?ng d? mã hóa ho?c gi?i mã d? li?u
-Channel: Kênh cung c?p phuong ti?n giao ti?p gi?a các th?c th?
-M?t mã d?i x?ng
-M?t mã d?i x?ng d? c?p d?n m?t lo?i m?t mã theo dó khóa du?c s? d?ng d? mã hóa d? li?u gi?ng nhau d? gi?i mã d? li?u, và do dó nó còn du?c g?i là m?t mã khóa chia s?. Chìa khóa ph?i du?c thi?t l?p ho?c d?ng ý tru?c khi trao d?i d? li?u gi?a các bên giao ti?p. Ðây là lý do nó còn du?c g?i là m?t mã khóa bí m?t. Có hai lo?i m?t mã d?i x?ng, m?t mã dòng và m?t mã kh?i. Chu?n mã hóa d? li?u (DES) và Chu?n mã hóa tiên ti?n (AES) là các ví d? ph? bi?n v? m?t mã kh?i, trong khi RC4 và A5 thu?ng du?c s? d?ng m?t mã dòng.
-Mã hóa lu?ng
-Các thu?t toán mã hóa này là các thu?t toán mã hóa áp d?ng các thu?t toán mã hóa trên co s? t?ng bit m?t cho van b?n thu?n túy b?ng cách s? d?ng lu?ng chính. Có hai lo?i m?t mã dòng: d?ng b? và không d?ng b?. M?t mã dòng d?ng b? là nh?ng noi mà lu?ng khóa ch? ph? thu?c vào khóa, trong khi m?t mã dòng không d?ng b? có lu?ng khóa cung ph? thu?c vào d? li?u du?c mã hóa. Trong m?t mã dòng, mã hóa và gi?i mã v? co b?n là cùng m?t ch?c nang vì chúng là các phép b? sung modulo 2 don gi?n ho?c ho?t d?ng XOR. Yêu c?u quan tr?ng trong thu?t toán mã hóa lu?ng là tính b?o m?t và tính ng?u nhiên c?a các lu?ng chính.
- 
-Ho?t d?ng c?a m?t m?t mã dòng
-Ch?n m?t mã
-Ðây là nh?ng thu?t toán mã hóa chia nh? van b?n du?c mã hóa (van b?n thu?n) thành các kh?i có d? dài c? d?nh và áp d?ng kh?i mã hóa theo kh?i. M?t mã kh?i thu?ng du?c xây d?ng b?ng cách s? d?ng chi?n lu?c thi?t k? du?c g?i là m?t mã Fiestel.
- 
-Ho?t d?ng don gi?n c?a m?t mã kh?i
-Các ch? d? ho?t d?ng khác nhau cho m?t mã kh?i là Sách mã di?n t? (ECB), chu?i kh?i m?t mã (CBC), Ch? d? ph?n h?i d?u ra (OFB) ho?c ch? d? truy c?p (CTR). Các ch? d? này du?c s? d?ng d? xác d?nh cách th?c mà m?t ch?c nang mã hóa s? du?c áp d?ng cho van b?n thu?n túy.
-Sách mã di?n t? (ECB)
-Ðây là m?t ch? d? ho?t d?ng co b?n trong dó d? li?u du?c mã hóa du?c t?o ra nhu là k?t qu? c?a vi?c áp d?ng thu?t toán mã hóa t?ng ngu?i m?t cho t?ng kh?i van b?n thu?n túy. Ðây là ch? d? don gi?n nh?t nhung không du?c s? d?ng trong th?c t? vì nó không an toàn và có th? ti?t l? thông tin:
- 
-Ch? d? sách mã di?n t? cho m?t mã kh?i
-Chu?i kh?i m?t mã 
-Trong ch? d? này, m?i kh?i van b?n thu?n là XORed v?i kh?i du?c mã hóa tru?c dó. Ch? d? CBC s? d?ng vector kh?i t?o IV d? mã hóa kh?i d?u tiên. Ðó là khuy?n cáo r?ng IV du?c ch?n ng?u nhiên:
- 
-Ch? d? chu?i kh?i mã hóa
-Ch? d? truy c?p
-Ch? d? CTR có hi?u qu? s? d?ng m?t mã kh?i làm m?t mã dòng. Trong tru?ng h?p này, m?t nonce duy nh?t du?c cung c?p du?c n?i v?i giá tr? b? d?m d? t?o ra m?t lu?ng khóa:
- 
+        //check device support bluetooth or not
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth is not available!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
-Tiêu chu?n mã hóa d? li?u (DES)
-DES dã du?c Vi?n Tiêu chu?n và Công ngh? Qu?c gia Hoa K? (NIST) gi?i thi?u nhu là m?t thu?t toán chu?n d? mã hóa và du?c s? d?ng chính trong nh?ng nam 1980 và 1990, nhung nó dã không du?c ch?ng minh là có kh? nang ch?ng l?i các cu?c t?n công b?o l?c, do nh?ng ti?n b? trong công ngh? và nghiên c?u mã hóa.
-Tiêu chu?n mã hóa nâng cao (AES)
-Nam 2001, sau m?t cu?c thi m?, m?t thu?t toán mã hóa tên là Rijndael du?c phát minh b?i các nhà m?t mã Joan Daemen và Vincent Rijmen du?c chu?n hóa là AES v?i nh?ng s?a d?i nh? c?a NIST vào nam 2001. Cho d?n nay, không có cu?c t?n công nào ch?ng l?i AES t?t hon phuong pháp b?o l?c. Rijndael g?c cho phép các kích c? khóa và khóa khác nhau là 128 bit, 192 bit và 256 bit, nhung trong tiêu chu?n AES, ch? cho phép kích thu?c kh?i 128 bit. Tuy nhiên, kích thu?c khóa 128 bit, 192 bit và 256 bit du?c cho phép.
+        //show bluetooth devices dialog when click connect button
+        btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPrinterPickDialog();
+            }
+        });
+
+        //set chat adapter
+        chatMessages = new ArrayList<>();
+        chatAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, chatMessages);
+        listView.setAdapter(chatAdapter);
+    }
+
+    private Handler handler = new Handler(new Handler.Callback() {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case ChatController.STATE_CONNECTED:
+                            setStatus("Connected to: " + connectingDevice.getName());
+                            btnConnect.setEnabled(false);
+                            break;
+                        case ChatController.STATE_CONNECTING:
+                            setStatus("Connecting...");
+                            btnConnect.setEnabled(false);
+                            break;
+                        case ChatController.STATE_LISTEN:
+                        case ChatController.STATE_NONE:
+                            setStatus("Not connected");
+                            break;
+                    }
+                    break;
+                case MESSAGE_WRITE:
+                    byte[] writeBuf = (byte[]) msg.obj;
+
+                    String writeMessage = new String(writeBuf);
+                    chatMessages.add("Me: " + writeMessage);
+                    chatAdapter.notifyDataSetChanged();
+                    break;
+                case MESSAGE_READ:
+                    byte[] readBuf = (byte[]) msg.obj;
+
+                    String readMessage = new String(readBuf, 0, msg.arg1);
+                    chatMessages.add(connectingDevice.getName() + ":  " + readMessage);
+                    chatAdapter.notifyDataSetChanged();
+                    break;
+                case MESSAGE_DEVICE_OBJECT:
+                    connectingDevice = msg.getData().getParcelable(DEVICE_OBJECT);
+                    Toast.makeText(getApplicationContext(), "Connected to " + connectingDevice.getName(),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_TOAST:
+                    Toast.makeText(getApplicationContext(), msg.getData().getString("toast"),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            return false;
+        }
+    });
+
+    private void showPrinterPickDialog() {
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.layout_bluetooth);
+        dialog.setTitle("Bluetooth Devices");
+
+        if (bluetoothAdapter.isDiscovering()) {
+            bluetoothAdapter.cancelDiscovery();
+        }
+        bluetoothAdapter.startDiscovery();
+
+        //Initializing bluetooth adapters
+        ArrayAdapter<String> pairedDevicesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        discoveredDevicesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+
+        //locate listviews and attatch the adapters
+        ListView listView = (ListView) dialog.findViewById(R.id.pairedDeviceList);
+        ListView listView2 = (ListView) dialog.findViewById(R.id.discoveredDeviceList);
+        listView.setAdapter(pairedDevicesAdapter);
+        listView2.setAdapter(discoveredDevicesAdapter);
+
+        // Register for broadcasts when a device is discovered
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(discoveryFinishReceiver, filter);
+
+        // Register for broadcasts when discovery has finished
+        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        registerReceiver(discoveryFinishReceiver, filter);
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+
+        // If there are paired devices, add each one to the ArrayAdapter
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                pairedDevicesAdapter.add(device.getName() + "\n" + device.getAddress());
+            }
+        } else {
+            pairedDevicesAdapter.add(getString(R.string.none_paired));
+        }
+
+        //Handling listview item click event
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                bluetoothAdapter.cancelDiscovery();
+                String info = ((TextView) view).getText().toString();
+                String address = info.substring(info.length() - 17);
+
+                connectToDevice(address);
+                dialog.dismiss();
+            }
+
+        });
+
+        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                bluetoothAdapter.cancelDiscovery();
+                String info = ((TextView) view).getText().toString();
+                String address = info.substring(info.length() - 17);
+
+                connectToDevice(address);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void setStatus(String s) {
+        status.setText(s);
+    }
+
+    private void connectToDevice(String deviceAddress) {
+        bluetoothAdapter.cancelDiscovery();
+        BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
+        chatController.connect(device);
+    }
+
+    private void findViewsByIds() {
+        status = (TextView) findViewById(R.id.status);
+        btnConnect = (Button) findViewById(R.id.btn_connect);
+        listView = (ListView) findViewById(R.id.list);
+        inputLayout = (TextInputLayout) findViewById(R.id.input_layout);
+        View btnSend = findViewById(R.id.btn_send);
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (inputLayout.getEditText().getText().toString().equals("")) {
+                    Toast.makeText(MainActivity.this, "Please input some texts", Toast.LENGTH_SHORT).show();
+                } else {
+                    //TODO: here
+                    sendMessage(inputLayout.getEditText().getText().toString());
+                    inputLayout.getEditText().setText("");
+                }
+            }
+        });
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_ENABLE_BLUETOOTH:
+                if (resultCode == Activity.RESULT_OK) {
+                    chatController = new ChatController(this, handler);
+                } else {
+                    Toast.makeText(this, "Bluetooth still disabled, turn off application!", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+        }
+    }
+
+    private void sendMessage(String message) {
+        if (chatController.getState() != ChatController.STATE_CONNECTED) {
+            Toast.makeText(this, "Connection was lost!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (message.length() > 0) {
+            byte[] send = message.getBytes();
+            chatController.write(send);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BLUETOOTH);
+        } else {
+            chatController = new ChatController(this, handler);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (chatController != null) {
+            if (chatController.getState() == ChatController.STATE_NONE) {
+                chatController.start();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (chatController != null)
+            chatController.stop();
+    }
+
+    private final BroadcastReceiver discoveryFinishReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+                    discoveredDevicesAdapter.add(device.getName() + "\n" + device.getAddress());
+                }
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                if (discoveredDevicesAdapter.getCount() == 0) {
+                    discoveredDevicesAdapter.add(getString(R.string.none_found));
+                }
+            }
+        }
+    };
+}s
